@@ -1,6 +1,7 @@
 import psycopg2
-from flask import Flask ,request
+from flask import Flask ,request, jsonify
 import requests
+import json
 
  #Establishing the connection
 conn = psycopg2.connect(
@@ -147,11 +148,35 @@ class API:
                 cursor.close()
                 conn.close()
         return 'Order '+ str(OrderID) + ' created successfully'
+    
+    ### get data from tables ###
+
+    '''http://127.0.0.1:5000/get?tableName=products'''
+    @app.route('/get',methods=['GET'])
+    def get_data():
+        global conn
+        global cursor
+        tableName=str(request.args.get('tableName'))
+        try: 
+            sql = 'select * from ' + tableName
+            cursor.execute(sql,(tableName,))
+            data = cursor.fetchall()
+            conn.commit()
+            return jsonify(data)
+
+        except (Exception, psycopg2.Error) as error:
+            return "Failed to get data from  "+ tableName + " table ", error
+
+        finally:
+            # closing database connection.
+            if conn:
+                cursor.close()
+                conn.close()
 
 if __name__=="__main__":
     app.run(debug=True)
 
 api=API()
-api.create_table
+#api.create_table
 #api.insert_product
 #api.insert_customer
