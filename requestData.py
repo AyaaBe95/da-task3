@@ -68,6 +68,13 @@ class RequestData:
         'CustomerID':int(CustomerID),'ProductID':int(ProductID),'OrderID':int(OrderID)})  
         print(res.text)
         print(res.status_code) 
+    
+    '''join tables'''
+    def join_tables(self,table1,table2,table3):
+        res = requests.get('http://127.0.0.1:5000/getData',params={'table1':str(table1),
+        'table2':str(table2),'table3':str(table3)})  
+        print(res.text)
+        print(res.status_code) 
 
 data=RequestData()
 
@@ -96,7 +103,7 @@ data=RequestData()
 #data.update_customer('Huda',999,'Jordan','Irbid',1)
 #data.update_order('2022-06-15',1,2,1)
 
-
-
+'''Join data'''
+#data.join_tables('Customers','Orders','Products')
 
 
