@@ -267,7 +267,6 @@ class API:
         ProductID=int(request.args.get('ProductID'))
         OrderID=int(request.args.get('OrderID'))
 
-
         try: 
             sql=''' UPDATE Orders SET OrderDate = '{0}' , CustomerID= {1} , ProductID = {2} 
                 WHERE OrderID = {3} '''.format(OrderDate,CustomerID,ProductID,OrderID)
@@ -284,6 +283,38 @@ class API:
             if conn:
                 cursor.close()
                 conn.close()
+    
+    ### Join tables ###
+    @app.route('/getData',methods=['GET'])
+    def join_tables():
+        global conn
+        global cursor
+
+        table1=str(request.args.get('table1'))
+        table2=str(request.args.get('table2'))
+        table3=str(request.args.get('table3'))
+        try: 
+            sql= '''
+            SELECT {0}.CustomerName, {0}.ContactNumber, {0}.City, {0}.Country,
+	        {1}.OrderDate, {2}.ProductName, {2}.ProductPrice
+            FROM(({1}
+                INNER JOIN {0} ON {1}.CustomerID = {0}.CustomerID)
+                INNER JOIN {2} ON {1}.ProductID = {2}.ProductID) '''.format(table1,table2,table3)
+
+            cursor.execute(sql,(table1,table2,table3))
+            data=cursor.fetchall()
+            conn.commit()
+            return jsonify(data)
+
+        except (Exception, psycopg2.Error) as error:
+            return "Failed to get data ", error
+
+        finally:
+            # closing database connection.
+            if conn:
+                cursor.close()
+                conn.close()
+
 
 if __name__=="__main__":
     app.run(debug=True)
