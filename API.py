@@ -201,6 +201,89 @@ class API:
             if conn:
                 cursor.close()
                 conn.close()
+    
+    ### update data ###
+
+    '''http://127.0.0.1:5000/updateProduct?ProductName=glass&ProductPrice=60&ProductID=1'''
+    @app.route('/updateProduct',methods=['PUT','GET'])
+    def update_product():
+        global conn
+        global cursor
+        ProductName=str(request.args.get('ProductName'))
+        ProductPrice=int(request.args.get('ProductPrice'))
+        ProductID=int(request.args.get('ProductID'))
+
+        try: 
+            sql="UPDATE PRODUCTS SET ProductName = '{0}' , productPrice= {1} WHERE ProductID = {2} ".format(ProductName,ProductPrice,ProductID)
+            cursor.execute(sql,(ProductName,ProductPrice,ProductID,))
+            conn.commit()
+            return 'Data updated successfully'
+
+        except (Exception, psycopg2.Error) as error:
+            return "Failed to update data ", error
+
+        finally:
+            # closing database connection.
+            if conn:
+                cursor.close()
+                conn.close()
+    
+    '''http://127.0.0.1:5000/updateCustomer?CustomerName=Reem&ContactNumber=6666&Country=Jordan&City=Amman&CustomerID=1'''
+    @app.route('/updateCustomer',methods=['PUT','GET'])
+    def update_Customer():
+        global conn
+        global cursor
+        CustomerName=str(request.args.get('CustomerName'))
+        ContactNumber=int(request.args.get('ContactNumber'))
+        Country=str(request.args.get('Country'))
+        City=str(request.args.get('City'))
+        CustomerID=int(request.args.get('CustomerID'))
+
+        try: 
+            sql=''' UPDATE Customers SET CustomerName = '{0}' , ContactNumber= {1} , 
+                Country = '{2}' , City = '{3}'
+                WHERE CustomerID = {4} '''.format(CustomerName,ContactNumber,Country,City,CustomerID)
+
+            cursor.execute(sql,(CustomerName,ContactNumber,Country,City,CustomerID))
+            conn.commit()
+            return 'Data updated successfully'
+
+        except (Exception, psycopg2.Error) as error:
+            return "Failed to update data ", error
+
+        finally:
+            # closing database connection.
+            if conn:
+                cursor.close()
+                conn.close()
+
+    '''http://127.0.0.1:5000/updateOrder?OrderDate=Reem&CustomerID=1&ProductID=1&OrderID=1'''
+    @app.route('/updateOrder',methods=['PUT','GET'])
+    def update_Order():
+        global conn
+        global cursor
+        OrderDate=str(request.args.get('OrderDate'))
+        CustomerID=int(request.args.get('CustomerID'))
+        ProductID=int(request.args.get('ProductID'))
+        OrderID=int(request.args.get('OrderID'))
+
+
+        try: 
+            sql=''' UPDATE Orders SET OrderDate = '{0}' , CustomerID= {1} , ProductID = {2} 
+                WHERE OrderID = {3} '''.format(OrderDate,CustomerID,ProductID,OrderID)
+
+            cursor.execute(sql,(OrderDate,CustomerID,ProductID,OrderID))
+            conn.commit()
+            return 'Data updated successfully'
+
+        except (Exception, psycopg2.Error) as error:
+            return "Failed to update data ", error
+
+        finally:
+            # closing database connection.
+            if conn:
+                cursor.close()
+                conn.close()
 
 if __name__=="__main__":
     app.run(debug=True)
@@ -209,3 +292,5 @@ api=API()
 #api.create_table
 #api.insert_product
 #api.insert_customer
+
+

@@ -49,6 +49,25 @@ class RequestData:
         res = requests.get('http://127.0.0.1:5000/delete',params={'tableName':str(tableName),'id':int(id)})  
         print(res.text)
         print(res.status_code) 
+    
+    ''' update data '''
+    def update_product(self,productName,productPrice,productID):
+        res = requests.get('http://127.0.0.1:5000/updateProduct',params={'ProductName':str(productName),
+        'ProductPrice':int(productPrice),'ProductID':int(productID)})  
+        print(res.text)
+        print(res.status_code) 
+    
+    def update_customer(self,CustomerName,ContactNumber,Country,City,CustomerID):
+        res = requests.get('http://127.0.0.1:5000/updateCustomer',params={'CustomerName':str(CustomerName),
+        'ContactNumber':int(ContactNumber),'Country':str(Country),'City':str(City),'CustomerID':int(CustomerID)})  
+        print(res.text)
+        print(res.status_code)
+
+    def update_order(self,OrderDate,CustomerID,ProductID,OrderID):
+        res = requests.get('http://127.0.0.1:5000/updateOrder',params={'OrderDate':str(OrderDate),
+        'CustomerID':int(CustomerID),'ProductID':int(ProductID),'OrderID':int(OrderID)})  
+        print(res.text)
+        print(res.status_code) 
 
 data=RequestData()
 
@@ -68,6 +87,16 @@ data=RequestData()
 #data.getData('orders')
 
 '''delete data from tables'''
-#data.delete('products',4)
-#data.delete('customers',3)
-#data.delete('orders',27)
+#data.delete('products',1)
+#data.delete('customers',1)
+#data.delete('orders',1)
+
+'''Update data '''
+#data.update_product('glass',25,1)
+#data.update_customer('Huda',999,'Jordan','Irbid',1)
+#data.update_order('2022-06-15',1,2,1)
+
+
+
+
+
