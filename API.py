@@ -165,7 +165,36 @@ class API:
             return jsonify(data)
 
         except (Exception, psycopg2.Error) as error:
-            return "Failed to get data from  "+ tableName + " table ", error
+            return "Failed to get data from %s table " %tableName , error
+
+        finally:
+            # closing database connection.
+            if conn:
+                cursor.close()
+                conn.close()
+
+    '''http://127.0.0.1:5000/delete/2?tableName=products&id=1'''
+    @app.route('/delete',methods=['GET'])
+    def delete_data():
+        global conn
+        global cursor
+        tableName=str(request.args.get('tableName'))
+        id=int(request.args.get('id'))     
+        try: 
+            if tableName == 'products':          
+                sql ='delete from ' + tableName + ' where ProductID = %s ' %id
+            elif tableName == 'customers':          
+                sql ='delete from ' + tableName + ' where CustomerID = %s ' %id
+            elif tableName == 'orders':          
+                sql ='delete from ' + tableName + ' where OrderID = %s ' %id
+            else:
+                return 'data is not exists'
+            cursor.execute(sql,(tableName,id,))
+            conn.commit()
+            return 'Data deleted successfully from %s table ' %tableName
+
+        except (Exception, psycopg2.Error) as error:
+            return "Failed to delete data from %s table " %tableName ,error
 
         finally:
             # closing database connection.

@@ -38,8 +38,15 @@ class RequestData:
         print(res.status_code)
     
     '''get data from tables'''
+
     def getData(self,tableName):
         res = requests.get('http://127.0.0.1:5000/get',params={'tableName':str(tableName)})  
+        print(res.text)
+        print(res.status_code) 
+    
+    '''delete data from tables'''
+    def delete(self,tableName,id):
+        res = requests.get('http://127.0.0.1:5000/delete',params={'tableName':str(tableName),'id':int(id)})  
         print(res.text)
         print(res.status_code) 
 
@@ -51,11 +58,16 @@ data=RequestData()
 #data.createOrdersTable('orders')
 
 '''insert into tables'''
-#data.addProduct('glass',20)
-#data.addCustomer('Ahmad',79999,'Jordan','Irbid')
-#data.createOrder('2022-06-04',1,1)
+#data.addProduct('glass3',20)
+#data.addCustomer('Moh',79999,'Jordan','Irbid')
+#data.createOrder('2022-06-04',1,7)
 
 '''get data from tables'''
 #data.getData('products')
 #data.getData('customers')
 #data.getData('orders')
+
+'''delete data from tables'''
+#data.delete('products',4)
+#data.delete('customers',3)
+#data.delete('orders',27)
